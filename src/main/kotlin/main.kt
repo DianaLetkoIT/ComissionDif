@@ -27,12 +27,18 @@ fun calculateCommission(transfer: Int, typeOfCard: String, previousTransfersMont
             finalTransfer = transfer
         }
         val commission = when (typeOfCard) {
-            "Mastercard" -> if (finalTransfer > 75_000) (finalTransfer - 75_000) * 0.006 + 20 else 0
+            "Mastercard" -> {
+                if (previousTransfersMonth > 75000) {
+                    finalTransfer * 0.006 + 20
+                } else if (previousTransfersMonth + finalTransfer > 75_000) (previousTransfersMonth + finalTransfer - 75_000) * 0.006 + 20
+                else 0
+            }
+
             "Visa" -> if (finalTransfer * 0.0075 > 35) finalTransfer * 0.0075 else 35
             "Мир" -> 0
             else -> false
 
-        }git push
+        }
         println("Клмиссия составит $commission рублей")
     } else {
         println("Превышен один из лимитов")
